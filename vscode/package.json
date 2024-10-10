@@ -67,6 +67,8 @@
       {
         "command": "konveyor.startAnalysis",
         "title": "Start Analysis",
+        "command": "konveyor.generateMockAnalysisResults",
+        "title": "Generate Mock Analysis Results",
         "category": "Konveyor",
         "icon": "$(gear)"
       }
@@ -313,6 +315,7 @@
     "@types/react-window": "^1.8.8",
     "babel-loader": "^9.2.1",
     "copy-webpack-plugin": "^12.0.2",
+    "js-yaml": "^4.1.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "uuid": "^10.0.0",
