@@ -184,6 +184,7 @@ jobs:
           node-version-file: ".nvmrc"
 
       - name: Publish to VS Code Marketplace
+
         if: ${{ github.event.inputs.prerelease == 'false' && github.event.inputs.dry-run == 'false' && github.event.inputs.publish_marketplace == 'true' && github.repository_owner == 'hhpatel14' }}
         run: |
           echo "TEST MODE: Would publish ./artifacts/konveyor-${{ needs.test_the_release.outputs.tag_name }}.vsix"
@@ -193,6 +194,7 @@ jobs:
           echo "Event name: ${{ github.event_name }}"
           echo "Prerelease: ${{ github.event.inputs.prerelease }}"
           echo "Dry run: ${{ github.event.inputs.dry-run }}"
+
           echo "Publish to Marketplace: ${{ github.event.inputs.publish_marketplace }}"
           # npx vsce publish --packagePath ./artifacts/konveyor-${{ needs.test_the_release.outputs.tag_name }}.vsix --pat ${{ secrets.VSCODE_MARKETPLACE_TOKEN }}
 
