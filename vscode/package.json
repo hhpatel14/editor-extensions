@@ -1,13 +1,13 @@
 {
   "name": "konveyor",
-  "displayName": "Konveyor Extension for VSCode",
+  "displayName": "test",
   "description": "Open-source migration and modernization tool",
   "author": "Konveyor",
   "icon": "resources/icon.png",
   "license": "Apache-2.0",
-  "version": "0.2.0-pre.2-1",
+  "version": "0.0.1",
   "main": "./out/extension.js",
-  "publisher": "konveyor",
+  "publisher": "test-hitp",
   "repository": {
     "type": "git",
     "url": "https://github.com/konveyor/editor-extensions"
@@ -32,9 +32,6 @@
     "node": ">=22.9.0",
     "npm": "^9.5.0 || >=10.5.2"
   },
-  "enabledApiProposals": [
-    "contribDiffEditorGutterToolBarMenus"
-  ],
   "extensionDependencies": [
     "redhat.java"
   ],
