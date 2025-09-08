@@ -201,6 +201,20 @@ jobs:
       - name: Rename VSIX Packages
         run: |
           mv ./artifacts/vscode-extension-linux/*.vsix ./artifacts/konveyor-${{ needs.test_the_release.outputs.tag_name }}.vsix
+          
+      - name: Debug release context
+        if: ${{ github.event_name == 'release' }}
+        run: |
+          echo "event_name=${{ github.event_name }}"
+          echo "event_action=${{ github.event.action }}"
+          echo "release.tag_name=${{ github.event.release.tag_name }}"
+          echo "release.prerelease=${{ github.event.release.prerelease }}"
+          echo "ref=${{ github.ref }}"
+          echo "ref_name=${{ github.ref_name }}"
+          echo "needs.tag_name=${{ needs.test_the_release.outputs.tag_name }}"
+          echo "needs.prerelease=${{ needs.test_the_release.outputs.prerelease }}"
+          echo "repository=${{ github.repository }}"
+          echo "repository_owner=${{ github.repository_owner }}"
 
       - name: Set up Node.js for publishing
         if: ${{ github.repository_owner == 'hhpatel14' && github.event_name == 'release' }}
