@@ -145,7 +145,7 @@ jobs:
       - name: Package VSIX (pre-release)
         if: ${{ needs.test_the_release.outputs.prerelease == 'true' }}
         run: |
-          vsce package --pre-release --no-dependencies -o ./dist/konveyor-${{ needs.test_the_release.outputs.tag_name }}.vsix
+          npx @vscode/vsce package --pre-release --no-dependencies -o ./dist/konveyor-${{ needs.test_the_release.outputs.tag_name }}.vsix
 
       - name: Package VSIX (release)
         if: ${{ needs.test_the_release.outputs.prerelease == 'false' }}
