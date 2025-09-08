@@ -5,7 +5,7 @@
   "author": "Konveyor",
   "icon": "resources/icon.png",
   "license": "Apache-2.0",
-  "version": "0.2.0-pre.2",
+  "version": "0.2.0-pre.2-1",
   "main": "./out/extension.js",
   "publisher": "konveyor",
   "repository": {
@@ -67,13 +67,13 @@
       },
       {
         "command": "konveyor.showAnalysisPanel",
-        "title": "Open Konveyor Analysis View",
+        "title": "Open Analysis View",
         "category": "Konveyor",
         "icon": "$(book)"
       },
       {
         "command": "konveyor.showResolutionPanel",
-        "title": "Open Konveyor Resolution View",
+        "title": "Open Resolution View",
         "category": "Konveyor",
         "icon": "$(beaker)"
       },
@@ -400,7 +400,7 @@
           "default": "debug",
           "description": "Logging level used for the extension",
           "scope": "window",
-          "order": 0
+          "order": 1
         },
         "konveyor.analyzerPath": {
           "type": "string",
@@ -409,79 +409,71 @@
           "scope": "resource",
           "order": 2
         },
-        "konveyor.solutionServer.url": {
-          "type": "string",
-          "default": "http://localhost:8000",
-          "description": "URL for the MCP solution server endpoint.",
+        "konveyor.diff.autoAcceptOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically apply diff changes when saving files.",
           "scope": "window",
           "order": 3
-        },
-        "konveyor.solutionServer.enabled": {
-          "type": "boolean",
-          "default": false,
-          "description": "Enable the MCP solution server client.",
-          "scope": "window",
-          "order": 4
-        },
-        "konveyor.solutionServer.auth": {
-          "type": "boolean",
-          "default": false,
-          "description": "Enable authentication for the solution server.",
-          "scope": "window",
-          "order": 5
-        },
-        "konveyor.solutionServer.auth.realm": {
-          "type": "string",
-          "default": "tackle",
-          "description": "Keycloak realm for authentication.",
-          "scope": "window",
-          "order": 6
-        },
-        "konveyor.solutionServer.auth.insecure": {
-          "type": "boolean",
-          "default": false,
-          "description": "Skip SSL certificate verification for the solution server.",
-          "scope": "window",
-          "order": 7
         },
         "konveyor.analysis.analyzeOnSave": {
           "type": "boolean",
           "default": true,
           "description": "Should analysis of file be run when it is saved? (Automatically enabled when Agent Mode is active)",
           "scope": "window",
-          "order": 8
+          "order": 10
         },
-        "konveyor.diffEditorType": {
-          "type": "string",
-          "enum": [
-            "diff",
-            "merge"
-          ],
-          "default": "merge",
-          "description": "Select the editor to use when resolving proposed solutions.",
+        "konveyor.analysis.incidentLimit": {
+          "type": "integer",
+          "default": 10000,
+          "description": "Maximum number of incidents to report",
           "scope": "window",
-          "order": 9
+          "order": 11,
+          "minimum": 1
+        },
+        "konveyor.analysis.contextLines": {
+          "type": "integer",
+          "default": 10,
+          "description": "Number of lines of context to include in incident reports.",
+          "scope": "window",
+          "order": 12,
+          "minimum": 1
+        },
+        "konveyor.analysis.codeSnipLimit": {
+          "type": "integer",
+          "default": 10,
+          "description": "Number of lines of code to include in incident reports.",
+          "scope": "window",
+          "order": 13,
+          "minimum": 1
+        },
+        "konveyor.analysis.analyzeKnownLibraries": {
+          "type": "boolean",
+          "default": false,
+          "description": "Should the analyzer analyze known open-source libraries?",
+          "scope": "window",
+          "order": 14
+        },
+        "konveyor.analysis.analyzeDependencies": {
+          "type": "boolean",
+          "default": true,
+          "description": "Should the analyzer analyze project dependencies?",
+          "scope": "window",
+          "order": 15
         },
         "konveyor.genai.enabled": {
           "type": "boolean",
           "default": true,
           "description": "Enable GenAI functionality for solution generation.",
           "scope": "window",
-          "order": 10
-        },
-        "konveyor.diff.autoAcceptOnSave": {
-          "type": "boolean",
-          "default": true,
-          "description": "Automatically apply diff changes when saving files.",
-          "scope": "window",
-          "order": 11
+          "order": 20
         },
         "konveyor.kai.agentMode": {
           "type": "boolean",
           "default": false,
           "description": "(Experimental) Use agentic flow when getting solution. Requires automatic analysis.",
           "scope": "window",
-          "order": 11
+          "order": 21
         },
         "konveyor.kai.excludedDiagnosticSources": {
           "type": "array",
@@ -490,7 +482,7 @@
           ],
           "description": "List of diagnostic sources to exclude from agentic workflow.",
           "scope": "window",
-          "order": 12
+          "order": 22
         },
         "konveyor.kai.cacheDir": {
           "type": [
@@ -500,7 +492,7 @@
           "default": null,
           "description": "Path to a directory containing cached responses",
           "scope": "window",
-          "order": 50
+          "order": 23
         },
         "konveyor.kai.traceDir": {
           "type": [
@@ -510,63 +502,65 @@
           "default": null,
           "description": "Path to a directory containing traces of LLM interactions",
           "scope": "window",
-          "order": 50
+          "order": 24
         },
         "konveyor.kai.traceEnabled": {
           "type": "boolean",
           "default": false,
           "description": "Whether to create traces of the communication with the model",
           "scope": "window",
-          "order": 50
+          "order": 25
+        },
+        "konveyor.solutionServer.enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable the MCP solution server client.",
+          "scope": "window",
+          "order": 30
+        },
+        "konveyor.solutionServer.url": {
+          "type": "string",
+          "default": "http://localhost:8000",
+          "pattern": "^https?://.*",
+          "patternErrorMessage": "The URL must start with http:// or https://",
+          "description": "URL for the MCP solution server endpoint.",
+          "scope": "window",
+          "order": 31
+        },
+        "konveyor.solutionServer.auth.enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable authentication for the solution server.",
+          "scope": "window",
+          "order": 32
+        },
+        "konveyor.solutionServer.auth.realm": {
+          "type": "string",
+          "default": "tackle",
+          "description": "Keycloak realm for authentication.",
+          "scope": "window",
+          "order": 33
+        },
+        "konveyor.solutionServer.auth.insecure": {
+          "type": "boolean",
+          "default": false,
+          "description": "Skip SSL certificate verification for the solution server.",
+          "scope": "window",
+          "order": 34
         },
         "konveyor.debug.webview": {
           "type": "boolean",
           "default": false,
           "description": "Enable debug logging for webview message handling",
           "scope": "window",
-          "order": 51
+          "order": 40
         },
         "konveyor.kai.demoMode": {
           "type": "boolean",
           "default": false,
           "description": "Whether to run Kai in demo mode i.e. use cached LLM responses",
           "scope": "window",
-          "order": 50
-        },
-        "konveyor.analysis.incidentLimit": {
-          "type": "number",
-          "default": 10000,
-          "description": "Maximum number of incidents to report",
-          "scope": "window",
-          "order": 99
-        },
-        "konveyor.analysis.contextLines": {
-          "type": "number",
-          "default": 10,
-          "description": "Number of lines of context to include in incident reports.",
-          "scope": "window",
-          "order": 99
-        },
-        "konveyor.analysis.codeSnipLimit": {
-          "type": "number",
-          "default": 10,
-          "description": "Number of lines of code to include in incident reports.",
-          "scope": "window",
-          "order": 99
-        },
-        "konveyor.analysis.analyzeKnownLibraries": {
-          "type": "boolean",
-          "default": false,
-          "description": "Should the analyzer analyze known open-source libraries?",
-          "scope": "window",
-          "order": 99
-        },
-        "konveyor.analysis.analyzeDependencies": {
-          "type": "boolean",
-          "default": true,
-          "description": "Should the analyzer analyze project dependencies?",
-          "scope": "window",
-          "order": 99
+          "order": 41
         }
       }
     },
@@ -579,31 +573,6 @@
     "jdtlsBundles": "../downloaded_assets/jdtls-bundles",
     "openSourceLabelsFile": "../downloaded_assets/opensource-labels-file/maven.default.index",
     "rulesets": "../downloaded_assets/rulesets"
-  },
-  "konveyor.fallbackAssets": {
-    "baseUrl": "https://github.com/konveyor/kai/releases/download/v0.2.0-pre.2/",
-    "assets": {
-      "linux-x64": {
-        "file": "kai-analyzer-rpc-linux-x86_64",
-        "sha256": "58d88fe81f2507974026cbc216f1e31e5596391cf422e783a6bb55e97816ee86"
-      },
-      "linux-arm64": {
-        "file": "kai-analyzer-rpc-linux-aarch64",
-        "sha256": "6d097960db24c77177f36f775c529861705e73f61eab0dff052aa9c52ce7a5b9"
-      },
-      "darwin-x64": {
-        "file": "kai-analyzer-rpc-macos-x86_64",
-        "sha256": "c6fc52b55426ee730a1290b662bffdba6a372ee50febda1938e4435e91227810"
-      },
-      "darwin-arm64": {
-        "file": "kai-analyzer-rpc-macos-arm64",
-        "sha256": "408243c994517528c7dbc7f4828ddb2c17bb51a2f21a2b73a6121f651174674a"
-      },
-      "win32-x64": {
-        "file": "kai-analyzer-rpc-windows-X64.exe",
-        "sha256": "f512bf519f529f5aad9b7a3cfba79125f8ec1a372afed01da2a1716bb76bfe78"
-      }
-    }
   },
   "scripts": {
     "clean": "rimraf out",

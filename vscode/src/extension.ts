@@ -1,17 +1,17 @@
 import * as vscode from "vscode";
 import { EventEmitter } from "events";
 import { KonveyorGUIWebviewViewProvider } from "./KonveyorGUIWebviewViewProvider";
-import { registerAllCommands as registerAllCommands, executeExtensionCommand } from "./commands";
+import { registerAllCommands as registerAllCommands } from "./commands";
 import { ExtensionState } from "./extensionState";
-import {
-  ConfigError,
-  createConfigError,
-  ExtensionData,
-  KONVEYOR_OUTPUT_CHANNEL_NAME,
-} from "@editor-extensions/shared";
+import { ConfigError, createConfigError, ExtensionData } from "@editor-extensions/shared";
 import { ViolationCodeActionProvider } from "./ViolationCodeActionProvider";
 import { AnalyzerClient } from "./client/analyzerClient";
-import { EXTENSION_NAME } from "./utilities/constants";
+import {
+  BUILD_INFO,
+  EXTENSION_DISPLAY_NAME,
+  EXTENSION_ID,
+  EXTENSION_NAME,
+} from "./utilities/constants";
 import {
   KaiInteractiveWorkflow,
   InMemoryCacheWithRevisions,
@@ -39,6 +39,7 @@ import {
   checkAndPromptForCredentials,
   getConfigGenAIEnabled,
   getConfigAutoAcceptOnSave,
+  updateConfigErrors,
 } from "./utilities";
 import { getBundledProfiles } from "./utilities/profiles/bundledProfiles";
 import { getUserProfiles } from "./utilities/profiles/profileService";
@@ -54,7 +55,6 @@ import { OutputChannelTransport } from "winston-transport-vscode";
 import { VerticalDiffManager } from "./diff/vertical/manager";
 import { StaticDiffAdapter } from "./diff/staticDiffAdapter";
 import { FileEditor } from "./utilities/ideUtils";
-import { BUILD_INFO, EXTENSION_ID } from "./utilities/constants";
 
 class VsCodeExtension {
   public state: ExtensionState;
@@ -98,6 +98,7 @@ class VsCodeExtension {
         isAgentMode: getConfigAgentMode(),
         activeDecorators: {},
         solutionServerConnected: false,
+        isWaitingForUserInteraction: false,
         analysisConfig: {
           labelSelector: "",
           labelSelectorValid: false,
@@ -143,7 +144,6 @@ class VsCodeExtension {
       mutateData,
       modifiedFiles: new Map(),
       modifiedFilesEventEmitter: new EventEmitter(),
-      isWaitingForUserInteraction: false,
       lastMessageId: "0",
       currentTaskManagerIterations: 0,
       workflowManager: {
@@ -229,6 +229,31 @@ class VsCodeExtension {
       const activeProfileId =
         matchingProfile?.id ?? (allProfiles.length > 0 ? allProfiles[0].id : null);
 
+      // Check for problematic solutionServer.auth configuration (should be an object, not boolean)
+      const config = vscode.workspace.getConfiguration(EXTENSION_NAME);
+      const authConfig = config.get("solutionServer.auth");
+      if (typeof authConfig === "boolean") {
+        this.state.logger.warn(
+          "Detected invalid configuration 'konveyor.solutionServer.auth' set to boolean. This setting should not be a boolean and can cause problems with other configuration keys.",
+        );
+        vscode.window
+          .showWarningMessage(
+            "Invalid configuration detected: 'konveyor.solutionServer.auth' is set to a boolean value (true/false). " +
+              "Please remove this setting from your VS Code settings. " +
+              "Use 'konveyor.solutionServer.auth.enabled' instead. " +
+              "This invalid setting can cause problems with other configuration options below it.",
+            "Open Settings",
+          )
+          .then((selection) => {
+            if (selection === "Open Settings") {
+              vscode.commands.executeCommand(
+                "workbench.action.openSettings",
+                "konveyor.solutionServer",
+              );
+            }
+          });
+      }
+
       // Get credentials for solution server client if solution server and auth are both enabled
       if (getConfigSolutionServerEnabled() && getConfigSolutionServerAuth()) {
         const credentials = await checkAndPromptForCredentials(this.context, this.state.logger);
@@ -250,6 +275,8 @@ class VsCodeExtension {
       this.state.mutateData((draft) => {
         draft.profiles = allProfiles;
         draft.activeProfileId = activeProfileId;
+        // Initialize configuration errors after setting profiles and activeProfileId
+        this.updateConfigurationErrors(draft);
       });
 
       this.setupModelProvider(paths().settingsYaml)
@@ -465,7 +492,7 @@ class VsCodeExtension {
           if (
             event.affectsConfiguration(`${EXTENSION_NAME}.solutionServer.url`) ||
             event.affectsConfiguration(`${EXTENSION_NAME}.solutionServer.enabled`) ||
-            event.affectsConfiguration(`${EXTENSION_NAME}.solutionServer.auth`)
+            event.affectsConfiguration(`${EXTENSION_NAME}.solutionServer.auth.enabled`)
           ) {
             this.state.logger.info("Solution server configuration modified!");
 
@@ -522,7 +549,6 @@ class VsCodeExtension {
         }),
       );
 
-      executeExtensionCommand("loadResultsFromDataFolder");
       this.state.logger.info("Extension initialized");
 
       // Setup diff status bar item
@@ -596,6 +622,19 @@ class VsCodeExtension {
     if (editor && editor.document.uri.toString() === fileUri) {
       this.updateDiffStatusBar(editor);
     }
+  }
+
+  private updateConfigurationErrors(draft: ExtensionData): void {
+    // Clear profile-related errors first
+    draft.configErrors = draft.configErrors.filter(
+      (error) =>
+        error.type !== "no-active-profile" &&
+        error.type !== "invalid-label-selector" &&
+        error.type !== "no-custom-rules",
+    );
+
+    // Update with current profile errors using the existing utility function
+    updateConfigErrors(draft, this.paths.settingsYaml.fsPath);
   }
 
   private registerWebviewProvider(): void {
@@ -745,7 +784,9 @@ class VsCodeExtension {
   public async dispose() {
     // Clean up pending interactions and resolver function to prevent memory leaks
     this.state.resolvePendingInteraction = undefined;
-    this.state.isWaitingForUserInteraction = false;
+    this.state.mutateData((draft) => {
+      draft.isWaitingForUserInteraction = false;
+    });
 
     // Dispose workflow manager
     if (this.state.workflowManager && this.state.workflowManager.dispose) {
@@ -780,7 +821,7 @@ let extension: VsCodeExtension | undefined;
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
   // Logger is our bae...before anything else
-  const outputChannel = vscode.window.createOutputChannel(KONVEYOR_OUTPUT_CHANNEL_NAME);
+  const outputChannel = vscode.window.createOutputChannel(EXTENSION_DISPLAY_NAME);
   const logger = winston.createLogger({
     level: getConfigLogLevel(),
     format: winston.format.combine(

@@ -174,8 +174,6 @@ jobs:
           Tag: __${{ needs.test_the_release.outputs.tag_name }}__
           Pre-Release: __${{ needs.test_the_release.outputs.prerelease }}__
           Dry run? __${{ github.event.inputs.dry-run}}__
-          Publish to Marketplace? __auto__
-          EOF
 
       - name: Checkout code
         uses: actions/checkout@v4
