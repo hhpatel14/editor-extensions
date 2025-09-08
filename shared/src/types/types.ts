@@ -182,6 +182,7 @@ export interface ExtensionData {
   isAgentMode: boolean;
   activeDecorators?: Record<string, string>;
   solutionServerConnected: boolean;
+  isWaitingForUserInteraction?: boolean;
 }
 
 export type ConfigErrorType =
@@ -333,5 +334,3 @@ export interface InputOutputCache<K, V, C, O> {
   invalidate(input: K, opts?: O): Promise<void>;
   reset(): Promise<void>;
 }
-
-export const KONVEYOR_OUTPUT_CHANNEL_NAME = "Konveyor";

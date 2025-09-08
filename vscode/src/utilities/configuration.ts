@@ -22,7 +22,7 @@ export const getConfigSolutionServerUrl = (): string =>
 export const getConfigSolutionServerEnabled = (): boolean =>
   getConfigValue<boolean>("solutionServer.enabled") ?? false;
 export const getConfigSolutionServerAuth = (): boolean =>
-  getConfigValue<boolean>("solutionServer.auth") ?? false;
+  getConfigValue<boolean>("solutionServer.auth.enabled") ?? false;
 export const getConfigSolutionServerRealm = (): string =>
   getConfigValue<string>("solutionServer.auth.realm") || "tackle";
 export const getConfigSolutionServerInsecure = (): boolean =>
@@ -116,7 +116,7 @@ export const updateLabelSelector = async (value: string): Promise<void> => {
   await updateConfigValue("analysis.labelSelector", value, vscode.ConfigurationTarget.Workspace);
 };
 
-export function updateConfigErrors(draft: ExtensionData, settingsPath: string): void {
+export function updateConfigErrors(draft: ExtensionData, _settingsPath: string): void {
   const { activeProfileId, profiles } = draft;
   const profile = profiles.find((p) => p.id === activeProfileId);
 
