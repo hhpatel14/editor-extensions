@@ -1,6 +1,6 @@
 {
   "name": "editor-extensions",
-  "version": "0.0.2-pre.0",
+  "version": "0.0.2",
   "private": true,
   "displayName": "Migration Assistant",
   "description": "VSCode Extension for Konveyor to assist in migrating and modernizing applications.",
