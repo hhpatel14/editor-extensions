@@ -141,7 +141,17 @@ jobs:
           npm run build
           npm run collect-assets -- --use-release
           npm run dist
-          npm run package
+      
+      - name: Package VSIX (pre-release)
+        if: ${{ needs.test_the_release.outputs.prerelease == 'true' }}
+        run: |
+          npx vsce package --pre-release -o ./dist/konveyor-${{ needs.test_the_release.outputs.tag_name }}.vsix
+
+      - name: Package VSIX (release)
+        if: ${{ needs.test_the_release.outputs.prerelease == 'false' }}
+        run: |
+          npx vsce package -o ./dist/konveyor-${{ needs.test_the_release.outputs.tag_name }}.vsix
+
 
       - name: Upload VSIX artifact
         uses: actions/upload-artifact@v4
