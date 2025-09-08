@@ -2,7 +2,7 @@
   "name": "editor-extensions",
   "version": "0.0.1",
   "private": true,
-  "displayName": "test",
+  "displayName": "Migration Assistant",
   "description": "VSCode Extension for Konveyor to assist in migrating and modernizing applications.",
   "license": "Apache-2.0",
   "publisher": "test-hitp",
