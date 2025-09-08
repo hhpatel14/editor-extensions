@@ -239,8 +239,9 @@ jobs:
         run: |
           echo "Publishing (pre-release) ./artifacts/konveyor-${{ needs.test_the_release.outputs.tag_name }}.vsix"
           echo "Tag name: ${{ needs.test_the_release.outputs.tag_name }}"
-          npx vsce publish --pre-release --packagePath ./artifacts/konveyor-${{ needs.test_the_release.outputs.tag_name }}.vsix --pat ${{ secrets.VSCODE_MARKETPLACE_TOKEN }}
-
+          npx vsce publish --pre-release --packagePath ./artifacts/konveyor-${{ needs.test_the_release.outputs.tag_name }}.vsix
+        env:
+          VSCE_PAT: ${{ secrets.VSCODE_MARKETPLACE_TOKEN }}
       - name: Create Release
         if: ${{ github.event.inputs.dry-run == 'false' && github.event_name != 'release' }}
         uses: ncipollo/release-action@v1
