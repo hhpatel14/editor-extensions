@@ -4,6 +4,10 @@ on:
   push:
     tags:
       - "*"
+  release:
+    types:
+      - prereleased
+      - published
 
   workflow_dispatch:
     inputs:
@@ -46,6 +50,7 @@ jobs:
       max-parallel: 3
     outputs:
       tag_name: ${{ steps.determine_tag.outputs.tag_name }}
+      prerelease: ${{ steps.determine_tag.outputs.prerelease }}
 
     steps:
       - name: Checkout code
@@ -61,8 +66,31 @@ jobs:
         run: |
           if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
             echo "tag_name=${{ inputs.tag_name }}" >> $GITHUB_OUTPUT
+            if [ "${{ inputs.prerelease }}" = "true" ]; then
+              echo "prerelease=true" >> $GITHUB_OUTPUT
+            else
+              echo "prerelease=false" >> $GITHUB_OUTPUT
+            fi
+          elif [ "${{ github.event_name }}" == "release" ]; then
+            echo "tag_name=${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
+            if [ "${{ github.event.release.prerelease }}" = "true" ]; then
+              echo "prerelease=true" >> $GITHUB_OUTPUT
+            else
+              # Fallback to SemVer hyphen inference if the flag isn't set as expected
+              if echo "${{ github.event.release.tag_name }}" | grep -q -- '-'; then
+                echo "prerelease=true" >> $GITHUB_OUTPUT
+              else
+                echo "prerelease=false" >> $GITHUB_OUTPUT
+              fi
+            fi
           else
             echo "tag_name=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+            # Infer prerelease from SemVer: a hyphen indicates a pre-release
+            if echo "${{ github.ref_name }}" | grep -q -- '-'; then
+              echo "prerelease=true" >> $GITHUB_OUTPUT
+            else
+              echo "prerelease=false" >> $GITHUB_OUTPUT
+            fi
           fi
         shell: bash
 
@@ -144,10 +172,8 @@ jobs:
           cat >> "$GITHUB_STEP_SUMMARY" <<EOF
           ## Release Information
           Tag: __${{ needs.test_the_release.outputs.tag_name }}__
-          Pre-Release: __${{ github.event.inputs.prerelease }}__
+          Pre-Release: __${{ needs.test_the_release.outputs.prerelease }}__
           Dry run? __${{ github.event.inputs.dry-run}}__
-          Publish to Marketplace? __${{ github.event.inputs.publish_marketplace }}__
-          EOF
 
       - name: Checkout code
         uses: actions/checkout@v4
@@ -178,28 +204,32 @@ jobs:
           mv ./artifacts/vscode-extension-linux/*.vsix ./artifacts/konveyor-${{ needs.test_the_release.outputs.tag_name }}.vsix
 
       - name: Set up Node.js for publishing
-        if: ${{ github.event.inputs.prerelease == 'false' && github.event.inputs.dry-run == 'false' && github.event.inputs.publish_marketplace == 'true' && github.repository_owner == 'hhpatel14' }}
+        if: ${{ github.event.inputs.dry-run == 'false' && github.repository_owner == 'hhpatel14' && github.event_name == 'release' }}
         uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
 
-      - name: Publish to VS Code Marketplace
-
-        if: ${{ github.event.inputs.prerelease == 'false' && github.event.inputs.dry-run == 'false' && github.event.inputs.publish_marketplace == 'true' && github.repository_owner == 'hhpatel14' }}
+      - name: Publish to VS Code Marketplace (release)
+        if: ${{ needs.test_the_release.outputs.prerelease == 'false' && github.event.inputs.dry-run == 'false' && github.repository_owner == 'hhpatel14' && github.event_name == 'release' }}
         run: |
-          echo "TEST MODE: Would publish ./artifacts/konveyor-${{ needs.test_the_release.outputs.tag_name }}.vsix"
+          echo "Publishing ./artifacts/konveyor-${{ needs.test_the_release.outputs.tag_name }}.vsix"
           echo "File path: ./artifacts/konveyor-${{ needs.test_the_release.outputs.tag_name }}.vsix"
           echo "Tag name: ${{ needs.test_the_release.outputs.tag_name }}"
           echo "Repository owner: ${{ github.repository_owner }}"
           echo "Event name: ${{ github.event_name }}"
-          echo "Prerelease: ${{ github.event.inputs.prerelease }}"
+          echo "Prerelease: ${{ needs.test_the_release.outputs.prerelease }}"
           echo "Dry run: ${{ github.event.inputs.dry-run }}"
+          npx vsce publish --packagePath ./artifacts/konveyor-${{ needs.test_the_release.outputs.tag_name }}.vsix --pat ${{ secrets.VSCODE_MARKETPLACE_TOKEN }}
 
-          echo "Publish to Marketplace: ${{ github.event.inputs.publish_marketplace }}"
-          # npx vsce publish --packagePath ./artifacts/konveyor-${{ needs.test_the_release.outputs.tag_name }}.vsix --pat ${{ secrets.VSCODE_MARKETPLACE_TOKEN }}
+      - name: Publish to VS Code Marketplace (pre-release)
+        if: ${{ needs.test_the_release.outputs.prerelease == 'true' && github.event.inputs.dry-run == 'false' && github.repository_owner == 'hhpatel14' && github.event_name == 'release' }}
+        run: |
+          echo "Publishing (pre-release) ./artifacts/konveyor-${{ needs.test_the_release.outputs.tag_name }}.vsix"
+          echo "Tag name: ${{ needs.test_the_release.outputs.tag_name }}"
+          npx vsce publish --pre-release --packagePath ./artifacts/konveyor-${{ needs.test_the_release.outputs.tag_name }}.vsix --pat ${{ secrets.VSCODE_MARKETPLACE_TOKEN }}
 
       - name: Create Release
-        if: ${{ github.event.inputs.dry-run == 'false' }}
+        if: ${{ github.event.inputs.dry-run == 'false' && github.event_name != 'release' }}
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ needs.test_the_release.outputs.tag_name }}
@@ -207,6 +237,6 @@ jobs:
           bodyFile: ./artifacts/release.md
           artifacts: |
             ./artifacts/konveyor-*.vsix
-          prerelease: ${{ github.event.inputs.prerelease }}
+          prerelease: ${{ needs.test_the_release.outputs.prerelease }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
