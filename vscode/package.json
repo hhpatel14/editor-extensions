@@ -1,8 +1,8 @@
 {
   "name": "konveyor",
-  "displayName": "test",
+  "displayName": "Migration Assistant",
   "description": "Open-source migration and modernization tool",
-  "author": "Konveyor",
+  "author": "test-hitp",
   "icon": "resources/icon.png",
   "license": "Apache-2.0",
   "version": "0.0.1",
