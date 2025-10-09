@@ -83,11 +83,21 @@ jobs:
         with:
           node-version-file: ".nvmrc"
 
+      - name: Install deps (uses lockfile)
+        run: npm ci
+      
       - name: Verify Node and npm versions
         run: |
           echo "Node version: $(node -v)"
           echo "NPM version: $(npm -v)"
-          npx vsce --version
+          # Fail if @vscode/vsce isn't installed locally
+          npx --no-install @vscode/vsce --version
+
+      - name: Show resolved CLI paths
+        run: |
+          node -e "const p=require.resolve('@vscode/vsce/package.json');console.log('@vscode/vsce', require(p).version, '→', p)"
+          node -e "const p=require.resolve('ovsx/package.json');console.log('ovsx', require(p).version, '→', p)"
+      
 
       - name: Create Release
         uses: ncipollo/release-action@v1
