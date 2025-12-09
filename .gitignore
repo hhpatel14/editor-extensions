@@ -19,6 +19,7 @@ vscode/.metadata
 .vscode/settings.json
 vscode/.vscode-test
 vscode/org.eclipse.*
+vscode/core/CHANGELOG.md
 
 # Allow PNG files in vscode/resources
 !vscode/resources/*.png
