@@ -1,7 +1,7 @@
 {
   "name": "konveyor-1",
-  "displayName": "Konveyor Extension for VSCode",
-  "description": "Open-source migration and modernization tool",
+  "displayName": "Konveyor Extension (test-hitp)",
+  "description": "Open-source migration and modernization tool (test-hitp)",
   "author": "throwaway",
   "icon": "resources/icon.png",
   "license": "Apache-2.0",
