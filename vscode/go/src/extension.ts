@@ -9,7 +9,7 @@ import { GoExternalProviderManager } from "./goExternalProviderManager";
 import { getDependencyProviderBinaryPath } from "./pathUtils";
 
 const EXTENSION_DISPLAY_NAME = "Konveyor Go";
-const EXTENSION_ID = "konveyor.konveyor-go";
+const EXTENSION_ID = "test-hitp.konveyor-go";
 
 export async function activate(context: vscode.ExtensionContext) {
   // Setup logger
@@ -79,7 +79,7 @@ export async function activate(context: vscode.ExtensionContext) {
   });
 
   // Get core extension API
-  const coreExtension = vscode.extensions.getExtension("konveyor.konveyor");
+  const coreExtension = vscode.extensions.getExtension("test-hitp.konveyor-1");
   if (!coreExtension) {
     const message = "Konveyor Go extension requires Konveyor Core extension to be installed";
     logger.error(message);

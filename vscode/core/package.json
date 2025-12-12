@@ -1,13 +1,13 @@
 {
-  "name": "konveyor",
+  "name": "konveyor-1",
   "displayName": "Konveyor Extension for VSCode",
   "description": "Open-source migration and modernization tool",
-  "author": "Konveyor",
+  "author": "throwaway",
   "icon": "resources/icon.png",
   "license": "Apache-2.0",
   "version": "0.4.0",
   "main": "./out/extension.js",
-  "publisher": "konveyor",
+  "publisher": "test-hitp",
   "repository": {
     "type": "git",
     "url": "https://github.com/konveyor/editor-extensions"
@@ -41,153 +41,153 @@
   "contributes": {
     "commands": [
       {
-        "command": "konveyor.openProfilesPanel",
+        "command": "konveyor-1.openProfilesPanel",
         "title": "Manage Analysis Profile",
         "category": "Konveyor",
         "icon": "$(settings-gear)"
       },
       {
-        "command": "konveyor.modelProviderSettingsOpen",
+        "command": "konveyor-1.modelProviderSettingsOpen",
         "title": "Open the GenAI model provider configuration file",
         "category": "Konveyor",
         "icon": "$(gear)"
       },
       {
-        "command": "konveyor.modelProviderSettingsBackupReset",
+        "command": "konveyor-1.modelProviderSettingsBackupReset",
         "title": "Open the default the GenAI model provider configuration file and backup the current file",
         "category": "Konveyor",
         "icon": "$(gear)"
       },
       {
-        "command": "konveyor.showAnalysisPanel",
+        "command": "konveyor-1.showAnalysisPanel",
         "title": "Open Analysis View",
         "category": "Konveyor",
         "icon": "$(book)"
       },
       {
-        "command": "konveyor.showResolutionPanel",
+        "command": "konveyor-1.showResolutionPanel",
         "title": "Open Resolution View",
         "category": "Konveyor",
         "icon": "$(beaker)"
       },
       {
-        "command": "konveyor.expandAllIssues",
+        "command": "konveyor-1.expandAllIssues",
         "title": "Expand All",
         "category": "Konveyor",
         "icon": "$(expand-all)"
       },
       {
-        "command": "konveyor.expandSingleIssue",
+        "command": "konveyor-1.expandSingleIssue",
         "title": "Expand All",
         "category": "Konveyor",
         "icon": "$(expand-all)"
       },
       {
-        "command": "konveyor.fixGroupOfIncidents",
+        "command": "konveyor-1.fixGroupOfIncidents",
         "title": "Resolve incidents",
         "category": "Konveyor",
         "icon": "$(debug-console)"
       },
       {
-        "command": "konveyor.fixIncident",
+        "command": "konveyor-1.fixIncident",
         "title": "Resolve incident",
         "category": "Konveyor",
         "icon": "$(debug-console)"
       },
       {
-        "command": "konveyor.openAnalysisDetails",
+        "command": "konveyor-1.openAnalysisDetails",
         "title": "Open Details",
         "category": "Konveyor",
         "icon": "$(book)"
       },
       {
-        "command": "konveyor.overrideAnalyzerBinaries",
+        "command": "konveyor-1.overrideAnalyzerBinaries",
         "title": "Override Analyzer Binary",
         "category": "Konveyor",
         "icon": "$(gear)"
       },
       {
-        "command": "konveyor.configureCustomRules",
+        "command": "konveyor-1.configureCustomRules",
         "title": "Configure Custom Rules",
         "category": "Konveyor",
         "icon": "$(gear)"
       },
       {
-        "command": "konveyor.startServer",
+        "command": "konveyor-1.startServer",
         "title": "Start Server",
         "category": "Konveyor",
         "icon": "$(play)"
       },
       {
-        "command": "konveyor.stopServer",
+        "command": "konveyor-1.stopServer",
         "title": "Stop Server",
         "category": "Konveyor",
         "icon": "$(stop)"
       },
       {
-        "command": "konveyor.restartServer",
+        "command": "konveyor-1.restartServer",
         "title": "Restart Server",
         "category": "Konveyor",
         "icon": "$(restart)"
       },
       {
-        "command": "konveyor.restartSolutionServer",
+        "command": "konveyor-1.restartSolutionServer",
         "title": "Restart Solution Server",
         "category": "Konveyor",
         "icon": "$(restart)"
       },
       {
-        "command": "konveyor.runAnalysis",
+        "command": "konveyor-1.runAnalysis",
         "title": "Run Analysis",
         "category": "Konveyor",
         "icon": "$(play)"
       },
       {
-        "command": "konveyor.loadStaticResults",
+        "command": "konveyor-1.loadStaticResults",
         "title": "Load results from files",
         "category": "Konveyor"
       },
       {
-        "command": "konveyor.loadResultsFromDataFolder",
+        "command": "konveyor-1.loadResultsFromDataFolder",
         "title": "Reload results",
         "category": "Konveyor"
       },
       {
-        "command": "konveyor.cleanRuleSets",
+        "command": "konveyor-1.cleanRuleSets",
         "title": "Reset analysis results",
         "category": "Konveyor"
       },
       {
-        "command": "konveyor.loadRuleSets",
+        "command": "konveyor-1.loadRuleSets",
         "title": "Load analysis results",
         "category": "Konveyor"
       },
       {
-        "command": "konveyor.generateDebugArchive",
+        "command": "konveyor-1.generateDebugArchive",
         "title": "Generate Debug Archive",
         "category": "Konveyor",
         "icon": "$(bug)"
       },
       {
-        "command": "konveyor.configureSolutionServerCredentials",
+        "command": "konveyor-1.configureSolutionServerCredentials",
         "title": "Configure Solution Server Credentials",
         "category": "Konveyor",
         "icon": "$(key)"
       },
       {
-        "command": "konveyor.showDiffActions",
+        "command": "konveyor-1.showDiffActions",
         "title": "Show Diff Actions",
         "category": "Konveyor",
         "icon": "$(diff)"
       },
       {
-        "command": "konveyor.syncHubProfiles",
+        "command": "konveyor-1.syncHubProfiles",
         "title": "Sync Profiles from Hub",
         "category": "Konveyor",
         "icon": "$(sync)"
       },
       {
-        "command": "konveyor.retryProfileSync",
+        "command": "konveyor-1.retryProfileSync",
         "title": "Retry Profile Sync Connection",
         "category": "Konveyor",
         "icon": "$(debug-restart)"
@@ -195,23 +195,23 @@
     ],
     "submenus": [
       {
-        "id": "konveyor.submenu",
+        "id": "konveyor-1.submenu",
         "label": "Konveyor Actions"
       }
     ],
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "konveyor",
+          "id": "konveyor-1",
           "title": "Konveyor",
           "icon": "resources/icon.png"
         }
       ]
     },
     "views": {
-      "konveyor": [
+      "konveyor-1": [
         {
-          "id": "konveyor.issueView",
+          "id": "konveyor-1.issueView",
           "name": "Issues"
         }
       ]
@@ -219,57 +219,57 @@
     "menus": {
       "view/title": [
         {
-          "command": "konveyor.showAnalysisPanel",
+          "command": "konveyor-1.showAnalysisPanel",
           "group": "navigation@1",
-          "when": "view == konveyor.issueView"
+          "when": "view == konveyor-1.issueView"
         },
         {
-          "command": "konveyor.showResolutionPanel",
+          "command": "konveyor-1.showResolutionPanel",
           "group": "navigation@2",
-          "when": "view == konveyor.issueView"
+          "when": "view == konveyor-1.issueView"
         },
         {
-          "command": "konveyor.expandAllIssues",
+          "command": "konveyor-1.expandAllIssues",
           "group": "navigation@3",
-          "when": "view == konveyor.issueView"
+          "when": "view == konveyor-1.issueView"
         }
       ],
       "view/item/context": [
         {
-          "command": "konveyor.fixGroupOfIncidents",
+          "command": "konveyor-1.fixGroupOfIncidents",
           "group": "inline@3",
           "when": "view == konveyor.issueView && viewItem == incident-type-item"
         },
         {
-          "command": "konveyor.fixIncident",
+          "command": "konveyor-1.fixIncident",
           "group": "inline@1",
           "when": "view == konveyor.issueView && viewItem == reference-item"
         },
         {
-          "command": "konveyor.expandSingleIssue",
+          "command": "konveyor-1.expandSingleIssue",
           "group": "inline@2",
           "when": "view == konveyor.issueView && viewItem == incident-type-item"
         },
         {
-          "command": "konveyor.openAnalysisDetails",
+          "command": "konveyor-1.openAnalysisDetails",
           "group": "inline@1",
           "when": "view == konveyor.issueView && viewItem == incident-type-item"
         }
       ],
       "explorer/context": [
         {
-          "submenu": "konveyor.submenu",
+          "submenu": "konveyor-1.submenu",
           "group": "navigation@1"
         }
       ],
-      "konveyor.submenu": [],
+      "konveyor-1.submenu": [],
       "commandPalette": [
         {
-          "command": "konveyor.expandSingleIssue",
+          "command": "konveyor-1.expandSingleIssue",
           "when": "never"
         },
         {
-          "command": "konveyor.loadRuleSets",
+          "command": "konveyor-1.loadRuleSets",
           "when": "never"
         }
       ]

@@ -2,12 +2,12 @@
   "name": "konveyor-go",
   "displayName": "Konveyor Go Extension",
   "description": "Go language support for Konveyor migration and modernization",
-  "author": "Konveyor",
+  "author": "throwaway",
   "icon": "resources/icon.png",
   "license": "Apache-2.0",
   "version": "0.4.0",
   "main": "./out/extension.js",
-  "publisher": "konveyor",
+  "publisher": "test-hitp",
   "repository": {
     "type": "git",
     "url": "https://github.com/konveyor/editor-extensions"
@@ -29,7 +29,7 @@
     "npm": "^9.5.0 || >=10.5.2"
   },
   "extensionDependencies": [
-    "konveyor.konveyor",
+    "test-hitp.konveyor-1",
     "golang.go"
   ],
   "activationEvents": [

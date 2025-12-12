@@ -118,7 +118,7 @@ export async function activate(context: vscode.ExtensionContext) {
   logger.info("Maven installation detected");
 
   // Get core extension API
-  const coreExtension = vscode.extensions.getExtension("konveyor.konveyor");
+  const coreExtension = vscode.extensions.getExtension("test-hitp.konveyor-1");
   if (!coreExtension) {
     const message = "Konveyor Java extension requires Konveyor Core extension to be installed";
     logger.error(message);

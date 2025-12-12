@@ -35,7 +35,7 @@ export async function activate(context: vscode.ExtensionContext) {
   // Typescript Language Server comes with VS code ASFAICT
 
   // Get core extension API
-  const coreExtension = vscode.extensions.getExtension("konveyor.konveyor");
+  const coreExtension = vscode.extensions.getExtension("test-hitp.konveyor-1");
   if (!coreExtension) {
     const message =
       "Konveyor Javascript extension requires Konveyor Core extension to be installed";

@@ -380,7 +380,7 @@ const actions: {
     executeExtensionCommand("stopServer");
   },
   [RESTART_SOLUTION_SERVER]() {
-    vscode.commands.executeCommand("konveyor.restartSolutionServer");
+    executeExtensionCommand("restartSolutionServer");
   },
   [ENABLE_GENAI]() {
     executeExtensionCommand("enableGenAI");

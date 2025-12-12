@@ -1,11 +1,14 @@
 import * as vscode from "vscode";
 import * as pathlib from "path";
 import { fileURLToPath } from "url";
-import { EXTENSION_NAME } from "./constants";
 import { AnalysisProfile, createConfigError, ExtensionData } from "@editor-extensions/shared";
 
+// Use "konveyor" for configuration namespace to maintain backward compatibility
+// even though extension name is now "konveyor-1"
+const CONFIG_NAMESPACE = "konveyor";
+
 function getConfigValue<T>(key: string): T | undefined {
-  return vscode.workspace.getConfiguration(EXTENSION_NAME)?.get<T>(key);
+  return vscode.workspace.getConfiguration(CONFIG_NAMESPACE)?.get<T>(key);
 }
 
 async function updateConfigValue<T>(
@@ -14,7 +17,7 @@ async function updateConfigValue<T>(
   scope: vscode.ConfigurationTarget = vscode.ConfigurationTarget.Workspace,
 ): Promise<void> {
   try {
-    await vscode.workspace.getConfiguration(EXTENSION_NAME).update(key, value, scope);
+    await vscode.workspace.getConfiguration(CONFIG_NAMESPACE).update(key, value, scope);
   } catch (error) {
     // Log the error for debugging
     console.error(`Failed to update configuration key "${key}":`, error);
@@ -95,7 +98,7 @@ export const getExcludedDiagnosticSources = (): string[] =>
  * @returns A record of all configuration values.
  */
 export function getAllConfigurationValues(): Record<string, any> {
-  const config = vscode.workspace.getConfiguration(EXTENSION_NAME);
+  const config = vscode.workspace.getConfiguration(CONFIG_NAMESPACE);
   const result: Record<string, any> = {};
   for (const key of Object.keys(config)) {
     if (!key.startsWith("inspect") && !key.startsWith("update")) {

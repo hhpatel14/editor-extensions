@@ -770,9 +770,9 @@ class VsCodeExtension {
           this.state.logger.info("Configuration modified!");
 
           if (
-            event.affectsConfiguration(`${EXTENSION_NAME}.genai.demoMode`) ||
-            event.affectsConfiguration(`${EXTENSION_NAME}.genai.cacheDir`) ||
-            event.affectsConfiguration(`${EXTENSION_NAME}.genai.enabled`)
+            event.affectsConfiguration("konveyor.genai.demoMode") ||
+            event.affectsConfiguration("konveyor.genai.cacheDir") ||
+            event.affectsConfiguration("konveyor.genai.enabled")
           ) {
             this.setupModelProvider(paths().settingsYaml)
               .then((configError) => {
@@ -810,14 +810,14 @@ class VsCodeExtension {
               });
           }
 
-          if (event.affectsConfiguration(`${EXTENSION_NAME}.genai.agentMode`)) {
+          if (event.affectsConfiguration("konveyor.genai.agentMode")) {
             const agentMode = getConfigAgentMode();
             this.state.mutateSettings((draft) => {
               draft.isAgentMode = agentMode;
             });
           }
 
-          if (event.affectsConfiguration(`${EXTENSION_NAME}.logLevel`)) {
+          if (event.affectsConfiguration("konveyor.logLevel")) {
             this.state.logger.info("Log level configuration modified!");
             const newLogLevel = getConfigLogLevel();
             this.state.logger.level = newLogLevel;
