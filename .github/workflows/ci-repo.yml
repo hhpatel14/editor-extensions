@@ -160,7 +160,7 @@ jobs:
         run: |
           if [[ "${{ github.ref }}" == refs/tags/v* ]]; then
             # Tagged release: use release artifacts
-            npm run collect-assets -- --use-release
+            npm run collect-assets -- --use-workflow-artifacts --branch=main
           else
             # Development build: use workflow artifacts from current branch
             npm run collect-assets -- --use-workflow-artifacts --branch=main
