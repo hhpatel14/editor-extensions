@@ -34,6 +34,11 @@
   "extensionDependencies": [
     "vscode.git"
   ],
+  "extensionPack": [
+    "test-hitp.konveyor-java",
+    "test-hitp.konveyor-javascript",
+    "test-hitp.konveyor-go"
+  ],
   "activationEvents": [
     "onFileSystem:konveyorMemFs",
     "onFileSystem:konveyorReadOnly"
